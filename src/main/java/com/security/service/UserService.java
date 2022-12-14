@@ -2,7 +2,6 @@ package com.security.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.User;
@@ -17,7 +16,7 @@ import com.security.dto.UserDto;
 public class UserService 
 {
 	@Autowired
-	private JdbcUserDetailsManager manager;
+	private JdbcUserDetailsManager jdbcManager;
 	
 	@Autowired
 	private JdbcTemplate jdbc;
@@ -27,7 +26,10 @@ public class UserService
 	
 	private UserDetails user;
 	
-	
+	/*
+	 * create UserDetails Object
+	 * using jdbc manager store user into db
+	 */
 	public void createUser(UserDto dto)
 	{
 		System.out.println("user :  " + dto.getUser() + " creating");	
@@ -39,16 +41,20 @@ public class UserService
 		            .build();
 		
 		System.out.println("user :  " + user.getUsername() + " created");			
-		manager.createUser(user);	
+		jdbcManager.createUser(user);	
+		System.out.println("user :  " + user.getUsername() + " created in db");	
 	}
+	
 	public List<UserDto> selectUser(String user)
 	{
 		List<UserDto> userList = new ArrayList<>();
-		String existQuery = "select count(USERNAME) as count from users where USERNAME = ?;";
-		userList= jdbc.query(existQuery,
+		String selectQuery = "select * from users where USERNAME = ?;";
+		System.out.println("test fail");
+		
+		userList= jdbc.query(selectQuery,
 				(rs, rowNum) -> new UserDto(rs.getString("USERNAME")	
 							,rs.getString("PASSWORD")
-							,(rs.getString("ENABLED").equals("1") ) ? true : false
+							,(rs.getInt("ENABLED") == 1) ? true:false 
 							,null)
 				, user);
 				
@@ -56,7 +62,7 @@ public class UserService
 	}
 	public void deleteUser(UserDto dto)
 	{
-		manager.deleteUser(dto.getUser());	
+		jdbcManager.deleteUser(dto.getUser());	
 	}
 	public void resetPassward(UserDto dto)
 	{

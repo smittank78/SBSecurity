@@ -1,7 +1,6 @@
 package com.security.config;
 
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,8 +49,8 @@ public class JdbcAuthentication
 		return new JdbcUserDetailsManager(dataSource());
 	}
 	
-/*	create user inh db when application executed
- *
+/*	create user in db when application executed
+ *	
  	@Bean
 	public UserDetailsManager users(DataSource dataSource) 
 	{

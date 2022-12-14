@@ -13,7 +13,7 @@ public class SecurityConfiguration
 	DataSource dataSource;
 
 	@Autowired
-    public void configureAMBuilder(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureBuilder(AuthenticationManagerBuilder auth) throws Exception {
 		System.out.println("jdbc authentication activating..");
         auth.jdbcAuthentication().dataSource(dataSource);
      //       .authoritiesByUsernameQuery("select email, role FROM USERS where email=?")

@@ -18,8 +18,7 @@ public class Authorization
 		System.out.println("http authorization set-up");
 		http
 		.authorizeHttpRequests()
-		.requestMatchers("/private").authenticated()
-		.requestMatchers("/dashboard").authenticated()
+		.requestMatchers("/login").authenticated()
 		.anyRequest().permitAll()
 		.and()
 		.formLogin()

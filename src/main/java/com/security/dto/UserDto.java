@@ -17,7 +17,7 @@ public class UserDto
 		this.user = user;
 		this.pass = pass;
 		this.enable = enable;
-		this.role = role;
+		this.role = ((role == null) ? "null" : role ).toUpperCase();
 	}
 	public String getUser() {
 		return user;
@@ -41,11 +41,10 @@ public class UserDto
 		return role;
 	}
 	public void setRole(String role) {
-		this.role = role;
+		this.role = ((role == null) ? "null" : role ).toUpperCase();
 	}
 	@Override
 	public String toString() {
 		return "UserDto [user=" + user + ", pass=" + pass + ", enable=" + enable + ", role=" + role + "]";
 	}
-
 }

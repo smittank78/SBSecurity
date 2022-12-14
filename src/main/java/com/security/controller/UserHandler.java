@@ -1,7 +1,6 @@
 package com.security.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,9 @@ public class UserHandler
 	
 	@Autowired
 	private PasswordEncoder encoder;
-	
+	/*
+	 * create user :
+	 */
 	@GetMapping("create")
 	public ResponseEntity<String> createUser(@RequestBody UserDto dto) 
 	{
@@ -31,31 +32,39 @@ public class UserHandler
 		service.createUser(dto);
 		if(service.selectUser(dto.getUser()).size() > 0)
 			return new ResponseEntity<>("user created",HttpStatus.OK);		
-		
 		return new ResponseEntity<>("fail",HttpStatus.INTERNAL_SERVER_ERROR);	
 	}
+	/*
+	 * reset passward
+	 * 
+	 * old_pass = passward from db
+	 * if matches then update pwd with new_pass in db
+	 */
 	@GetMapping("resetpassward")
 	public ResponseEntity<String> resetUserPassward(@RequestBody UserPwdResetDto dto) 
 	{
 		System.out.println("reset user passward request received...");
 		List<UserDto> selectUser = service.selectUser(dto.getUser());
-		UserDto user = selectUser.get(1);
-		/*
-		 * decode old passward 
-		 * match 
-		 * update with new 
-		 */
-		String pass = (selectUser.get(1).getPass());
+		UserDto user = selectUser.get(0);
+		user.toString();
+		String pass = (selectUser.get(0).getPass());
+		//match old_pass with passward stored in db
 		boolean matches = encoder.matches(dto.getOld_pass(), pass);
 		System.out.println("passward match : " + matches);
+		//if matches then update passward in db
 		if(matches)
 		{
 			user.setPass(dto.getNew_pass());
 			service.resetPassward(user);
-			return new ResponseEntity<>("passward reset done",HttpStatus.NO_CONTENT);				
+			System.out.println("passward reset done");
+			return new ResponseEntity<>("passward reset done",HttpStatus.OK);				
 		}
-		return new ResponseEntity<>("invalid old passward",HttpStatus.INTERNAL_SERVER_ERROR);	
+		//not match then send msg
+		return new ResponseEntity<>("invalid old passward",HttpStatus.OK);	
 	}
+	/*
+	 * delete user :
+	 */
 	@GetMapping("delete")
 	public ResponseEntity<String> deleteUser(@RequestBody UserDto dto) 
 	{
