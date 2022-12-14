@@ -23,9 +23,22 @@ configureBuilder -> autowired -> to enable authentication
 	 							-> old_pass = pwd from db
 	 							-> if matches then update in db
 	 							
-delete -> /user/delete	 -> -> USerDto as payLoad 
+ delete -> /user/delete	 -> -> USerDto as payLoad 
  							-> controller
 	 							-> delete user by userName							
  
+ 
+ api/ && api/home : is public api
+ 
+ api/login : is authorized spring security will redirect you on login page once login done then
+ 			 jwt token get generated and send to user
+  
+ api/private && api/dashboard : when user send request to this apis user also need to send 
+ 								token to api then using aop concept
+ 								 @before advice will executed and token validated 
+ 								 if token is valid then service going to execute 
+  								 else it will throw unauthorized user 
+ 
+ Aop : is used with parameterized methods
  
  Service Info : available on methods
